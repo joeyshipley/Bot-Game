@@ -1,1 +1,14 @@
 # Bot-Game
+
+##### Run Locally
+
+* create a slack bot user and generate a token
+* invite your bot user to your slack channel from the slack app
+* replace token value with your slack bot user token
+* (OPTIONAL) create a 'local.sh' script that runs the command for you
+
+```
+
+SLACK_TOKEN=xoxb-???????????-???????????????????????? node app.js
+
+```
