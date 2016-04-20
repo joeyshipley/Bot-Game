@@ -1,0 +1,18 @@
+{
+  "name": "bot-game",
+  "version": "1.0.0",
+  "description": "Bot Game",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Joey Shipley",
+  "license": "ISC",
+  "homepage": "https://github.com/joeyshipley/Bot-Game#readme",
+  "dependencies": {
+    "botbuilder": "^0.8.0",
+    "botkit": "^0.1.1",
+    "es6-promise": "^3.1.2",
+    "lodash": "^4.11.1"
+  }
+}
