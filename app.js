@@ -1,7 +1,7 @@
 'use strict';
 
 const Botkit = require('botkit');
-const SlackApi = require('./src/bot/slackapi.adapter.js');
+const SlackApi = require('./src/infrastructure/slackapi.adapter.js');
 const Game = require('./src/game/game.js');
 const builder = require('botbuilder');
 const controller = Botkit.slackbot();
