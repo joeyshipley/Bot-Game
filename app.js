@@ -7,6 +7,7 @@ const Game = require('./src/game/game.js');
 const playerCreateDialog = require('./src/bot/dialogs/playercreate.dialog.js');
 const speach = require('./src/bot/yelpihs.speach.js');
 const settings = require('./src/config/settings.config.js');
+const SlackApi = require('./src/infrastructure/slackapi.adapter.js');
 const UTIL = require('./src/infrastructure/util.js');
 
 var _controller = Botkit.slackbot();
@@ -44,16 +45,27 @@ _slackbot.add('/CreatePlayer', [ function (session) {
   playerCreateDialog(session, _bot, _game.actions.dm.newPlayerCharacter);
 } ]);
 
-_controller.hears([ 'play', 'join' ],[ 'direct_message','direct_mention' ],function(bot, message) {
+_controller.hears([ 'play', 'join' ],[ 'direct_message','direct_mention' ], function(bot, message) {
   bot.reply(message, "Ok, let's do this.");
 });
 
-_controller.hears([ 'help' ],[ 'direct_message','direct_mention','mention' ],function(bot, message) {
-  bot.startConversation(message,function(err,convo) {
-    _.forEach(speach.help.defaultConversation, function(message) {
-      convo.say(speach.populate(message));
+_controller.hears([ 'help' ],[ 'direct_message','direct_mention','mention' ], function(bot, message) {
+
+  SlackApi
+    .getUser(_bot.api, message.user)
+    .then(function(user) {
+      if(message.event === 'direct_message') { return user; }
+
+      bot.reply(message, UTIL.parse(speach.help.publicResponse, /%user_name/g, user.name));
+      return user;
+    })
+    .then(function(user) {
+      bot.startPrivateConversation(message, function(err, convo) {
+        _.forEach(speach.help.defaultConversation, function(message) {
+          convo.say(speach.populate(message));
+        });
+      });
     });
-  });
 });
 
 _slackbot.listenForMentions();

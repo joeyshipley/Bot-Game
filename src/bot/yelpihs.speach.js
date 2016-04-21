@@ -5,6 +5,7 @@ module.exports = {
   greeting: 'I %bot_name, have arrived. We are now in session.',
   help: {
     fyi: 'Remember, you can always ask me for \'help\'',
+    publicResponse: 'Fret not %user_name for I can help you. Though, let us continue this conversation away from these prying ears.',
     defaultConversation: [
       'I am refreshed by your interest in learning my game. So here\'s the deal, a well known secret of mine if you will...',
       'I do love to watch my players fail in their Adventures and Quests. Though most people want to just stair at their Character\'s Sheet.',
