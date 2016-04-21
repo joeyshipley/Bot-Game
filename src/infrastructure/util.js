@@ -10,11 +10,11 @@ module.exports = {
     return _.random(startRange, endRange);
   },
 
-  parse: function(str) {
-    var args = [].slice.call(arguments, 1);
+  parse: function(str, match) {
+    var args = [].slice.call(arguments, 2);
     var i = 0;
 
-    return str.replace(/%s/g, function() {
+    return str.replace(match, function() {
       return args[i++];
     });
   }

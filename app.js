@@ -19,11 +19,11 @@ var _bot = _controller
       if(!channel.is_member) { return; }
 
       bot.say({
-        text: UTIL.parse(speach.greeting, settings.BOT_NAME),
+        text: speach.populate(speach.greeting),
         channel: channel.id
       });
       bot.say({
-        text: UTIL.parse(speach.help_fyi),
+        text: speach.help.fyi,
         channel: channel.id
       });
     });
@@ -44,12 +44,16 @@ _slackbot.add('/CreatePlayer', [ function (session) {
   playerCreateDialog(session, _bot, _game.actions.dm.newPlayerCharacter);
 } ]);
 
-_controller.hears([ 'play', 'join' ],[ 'direct_message','direct_mention' ],function(bot,message) {
+_controller.hears([ 'play', 'join' ],[ 'direct_message','direct_mention' ],function(bot, message) {
   bot.reply(message, "Ok, let's do this.");
 });
 
-_controller.hears([ 'help' ],[ 'direct_message','direct_mention','mention' ],function(bot,message) {
-  bot.reply(message, "Sorry, there is nothing you can do in this game yet. You can thank the maker for that...");
+_controller.hears([ 'help' ],[ 'direct_message','direct_mention','mention' ],function(bot, message) {
+  bot.startConversation(message,function(err,convo) {
+    _.forEach(speach.help.defaultConversation, function(message) {
+      convo.say(speach.populate(message));
+    });
+  });
 });
 
 _slackbot.listenForMentions();
