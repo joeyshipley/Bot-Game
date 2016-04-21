@@ -1,4 +1,5 @@
-const _ = require('lodash');
+const UTIL = require('./infrastructure/util.js');
+
 const Warrior = require('./playerclasses/warrior.class.js');
 const Rogue = require('./playerclasses/rogue.class.js');
 const Magi = require('./playerclasses/magi.class.js');
@@ -11,7 +12,9 @@ const PLAYER_RACES = [ Human, Dwarf, Elf];
 const PLAYER_CLASSES = [ Warrior, Rogue, Magi ];
 
 var Game = function() {
-  this.actions = {
+  var self = this;
+
+  self.actions = {
     dm: {
       newPlayerCharacter: dmNewPlayerCharacter
     },
@@ -21,24 +24,16 @@ var Game = function() {
   };
 
   function dmNewPlayerCharacter() {
-    var raceKeyIndex = roll(0, PLAYER_RACES.length - 1);
-    var charRace = copy(PLAYER_RACES[raceKeyIndex]);
+    var raceIndex = UTIL.roll(0, PLAYER_RACES.length - 1);
+    var charRace = UTIL.copy(PLAYER_RACES[raceIndex]);
 
-    var classKeyIndex = roll(0, PLAYER_CLASSES.length - 1);
-    var charClass = copy(PLAYER_CLASSES[classKeyIndex]);
+    var classIndex = UTIL.roll(0, PLAYER_CLASSES.length - 1);
+    var charClass = UTIL.copy(PLAYER_CLASSES[classIndex]);
 
     return new PlayerCharacter(charRace, charClass);
   }
 
   function characterAttack(sourceCharacter, targetCharacter) {}
-
-  function roll(startRange, endRange) {
-    return _.random(startRange, endRange);
-  }
-
-  function copy(obj) {
-    return JSON.parse(JSON.stringify(obj));
-  }
 };
 module.exports = Game;
 

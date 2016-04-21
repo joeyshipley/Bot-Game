@@ -14,13 +14,13 @@ const DEFAULT_HP = {
 var Character = function(charRace, charClass) {
   var self = this;
 
-  this.name = 'Unnamed Character';
-  this.charRace = charRace;
-  this.charClass = charClass;
-  this.level = 1;
+  self.name = 'Unnamed Character';
+  self.charRace = charRace;
+  self.charClass = charClass;
+  self.level = 1;
 
-  this.stats = buildStats(charRace, charClass);
-  this.hp = buildHp(this.stats);
+  self.stats = buildStats(charRace, charClass);
+  self.hp = buildHp(self.stats);
 
   function buildStats(charRace, charClass) {
     return {
