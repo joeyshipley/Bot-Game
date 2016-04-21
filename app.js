@@ -5,6 +5,7 @@ const Botkit = require('botkit');
 const builder = require('botbuilder');
 const Game = require('./src/game/game.js');
 const playerCreateDialog = require('./src/bot/dialogs/playercreate.dialog.js');
+const characterSheetDialog = require('./src/bot/dialogs/charactersheet.dialog.js');
 const speach = require('./src/bot/yelpihs.speach.js');
 const settings = require('./src/config/settings.config.js');
 const SlackApi = require('./src/infrastructure/slackapi.adapter.js');
@@ -33,8 +34,11 @@ var _slackbot = new builder.SlackBot(_controller, _bot);
 var _game = new Game();
 
 _slackbot.use(function (session, next) {
+  console.log(session);
   if (!session.userData.character) {
     session.beginDialog('/CreatePlayer');
+  } else if(/(charactersheet)|(character sheet)|(sheet)|/gi.test(session.message.text)) {
+    session.beginDialog('/CharacterSheet');
   } else {
     next();
   }
@@ -44,10 +48,7 @@ _slackbot.add('/', function (session) {});
 _slackbot.add('/CreatePlayer', [ function (session) {
   playerCreateDialog(session, _bot, _game.actions.dm.newPlayerCharacter);
 } ]);
-
-_controller.hears([ 'play', 'join' ],[ 'direct_message','direct_mention' ], function(bot, message) {
-  bot.reply(message, "Ok, let's do this.");
-});
+_slackbot.add('/CharacterSheet', [ characterSheetDialog ]);
 
 _controller.hears([ 'help' ],[ 'direct_message','direct_mention','mention' ], function(bot, message) {
 

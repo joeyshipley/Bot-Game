@@ -12,13 +12,13 @@ var PlayerCreateDialog = function(session, bot, createCharacter) {
       return session;
     })
     .then(function(session) {
-      session.send("Hi %s, you will be playing a %s %s [health: %s/%s] today.",
+      session.send("Welcome to my world %s! Without a character your existence would be for not. You are now a %s %s [health: %s/%s].",
         session.userData.user.name,
         session.userData.character.charRace.label,
         session.userData.character.charClass.label,
         session.userData.character.hp.current,
         session.userData.character.hp.max);
-      session.send("If this is your first time here or has been a while, I recommend that you send me the message: !help (@yelpihs: !help).");
+      session.send("If you know not the rules of my realm, my suggestion is that you ask for my help.");
       session.endDialog();
     })
     .catch(function(error) { console.log(error); });
