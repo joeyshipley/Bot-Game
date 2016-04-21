@@ -1,4 +1,4 @@
-const UTIL = require('./infrastructure/util.js');
+const UTIL = require('../infrastructure/util.js');
 
 const Warrior = require('./playerclasses/warrior.class.js');
 const Rogue = require('./playerclasses/rogue.class.js');

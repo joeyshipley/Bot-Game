@@ -1,44 +1,14 @@
 'use strict';
 
-const _ = require('lodash');
-const Promise = require('es6-promise').Promise;
 const Botkit = require('botkit');
-const Game = require('./src/game.js');
+const SlackApi = require('./src/bot/slackapi.adapter.js');
+const Game = require('./src/game/game.js');
 const builder = require('botbuilder');
 const controller = Botkit.slackbot();
 
 var _bot = controller.spawn({ token: process.env.SLACK_TOKEN });
 var _slackbot = new builder.SlackBot(controller, _bot);
 var _game = new Game();
-
-_bot.getChannels = function() {
-  let _api = this.api;
-  return new Promise(function(resolve, reject) {
-    _api.channels.list({'exclude_archived' : 1}, function (err, res) {
-      if(!res.ok) { reject(new Error('Slack API failure in (channels.list)')); }
-
-      return resolve(res);
-    });
-  });
-};
-
-_bot.getUsers = function() {
-  let _api = this.api;
-  return new Promise(function(resolve, reject) {
-    _api.users.list({}, function (err, res) {
-      if(!res.ok) { reject(new Error('Slack API failure in (users.list)')); }
-
-      return resolve(res);
-    });
-  });
-};
-
-_bot.getUser = function(id) {
-  let _api = this.api;
-  return new Promise(function(resolve, reject) {
-
-  });
-};
 
 _slackbot.use(function (session, next) {
   if (!session.userData.initialized) {
@@ -49,27 +19,21 @@ _slackbot.use(function (session, next) {
 });
 _slackbot.add('/InitializeMember', [
   function (session) {
-    _bot
-      .getUsers()
-      .then(function(res) {
-        var users = res.members;
-        var user = _.find(users, function(u) {
-          return u.id && (u.id === session.userData.id);
-        });
+    SlackApi
+      .getUser(_bot.api, session.userData.id)
+      .then(function(user) {
         session.userData.user = { name: user.name };
-
         return session;
       })
       .then(function(session) {
-        var character = _game.actions.dm.newPlayerCharacter();
-        session.userData.character = character;
+        session.userData.character = _game.actions.dm.newPlayerCharacter();
         return session;
       })
       .then(function(session) {
         session.userData.initialized = true;
         return session.replaceDialog('/');
       })
-      .catch(function(err) { console.log(err); });
+      .catch(function(error) { console.log(error); });
   }
 ]);
 
